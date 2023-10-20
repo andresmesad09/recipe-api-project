@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      # use the current directory as context
+      context: .
+      args:
+        - DEV=true
+      # expose 8000 on local to 8000 to docker container
+    ports:
+      - "8000:8000"
+      # /app in our pc to /app on docker container - to avoid recreating the image
+    volumes:
+      - ./app:/app
+      # Command to run the service - by default uses the command on the Dockerfile
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
