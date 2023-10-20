@@ -19,6 +19,3 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-
-# add this to break the linting
-one=1
