@@ -16,3 +16,25 @@ services:
       # Command to run the service - by default uses the command on the Dockerfile
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      # db as the db service
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    # Set initial db configuration
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+volumes:
+  # Name of volume - Docker will create this for us
+  dev-db-data:
