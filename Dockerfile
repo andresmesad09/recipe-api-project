@@ -16,6 +16,10 @@ ARG DEV=false
 RUN python -m venv /py && \
     # update pip
     /py/bin/pip install --upgrade pip && \
+    # Install postgresql
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     # install requirements.txt recursively
     /py/bin/pip install -r /tmp/requirements.txt && \
     # Check if it's dev to install dev dependencies
@@ -24,6 +28,8 @@ RUN python -m venv /py && \
     fi && \
     # delete tmp folder - keep docker images as lightweight as possible
     rm -rf /tmp/ && \
+    # remove postgresql temp deps
+    apk del .tmp-build-deps && \
     # Add django-user - if we don't this, the only user will be root
     adduser \
         --disabled-password \
